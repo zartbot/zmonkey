@@ -81,7 +81,7 @@ Modify `dpdk-21.08/config/rte_config.h`
 ```bash
 git clone https://github.com/zartbot/zmonkey
 cd zmonkey
-build
+make
 
 ```
 
@@ -113,12 +113,15 @@ Example:
 8-Thread to handle 100G/100ms latency with 12.34% packet drop_rate
 
      zmonkey -- --first_lcore 24 --core_num 8  --mbuf_size 2097152 --l2r_latency 100000 --l2r_loss 1234
+
 16-Thread with 1M element buffer per thread,first lcore start at core.24
 
      zmonkey -- --first_lcore 24 --core_num 16  --mbuf_size 1048576 --l2r_latency 10000 
+
 Short parameters
 
      zmonkey -- -f 24 -n 12 -m 2097152 -d 100000 -D 100000
+
 ```
 
 ## Remote control methods
