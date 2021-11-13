@@ -90,6 +90,7 @@ int lcore_monkey(struct monkey_params *p)
     uint64_t failed_enq_cnt[2] = {0, 0};
     uint64_t deq_pkt_cnt[2] = {0, 0};
     uint64_t tx_pkt_cnt[2] = {0, 0};
+    uint64_t tx_bytes_cnt[2]= {0,0};
 
     
 
@@ -103,6 +104,7 @@ int lcore_monkey(struct monkey_params *p)
             for (int i = 0; i < 2; i++)
             {
                 rte_atomic64_set(&p->stats[i]->tx_pkt_cnt, tx_pkt_cnt[i] );
+                rte_atomic64_set(&p->stats[i]->tx_bytes, tx_bytes_cnt[i] );
                 rte_atomic64_set(&p->stats[i]->rx_pkt_cnt, rx_pkt_cnt[i] );
                 rte_atomic64_set(&p->stats[i]->drop_pkt_cnt, drop_pkt_cnt[i]);
                 rte_atomic64_set(&p->stats[i]->deq_pkt_cnt, deq_pkt_cnt[i]);
@@ -121,6 +123,7 @@ int lcore_monkey(struct monkey_params *p)
                 drop_pkt_cnt[i] = 0;
                 failed_enq_cnt[i] = 0;
                 deq_pkt_cnt[i] = 0;
+                tx_bytes_cnt[i]=0;
             }
             adjust_cnt = 0;
         }
@@ -209,6 +212,7 @@ int lcore_monkey(struct monkey_params *p)
                 } 
                 rte_eth_tx_buffer(ring_id, p->queue_id, tx_buffer[ring_id], tx_pkts[ring_id][i]);
                 tx_pkt_cnt[ring_id]++;
+                tx_bytes_cnt[ring_id]+= rte_pktmbuf_pkt_len(tx_pkts[ring_id][i]);
                 tx_head[ring_id]++;
             }
             // Process left packets
@@ -222,6 +226,7 @@ int lcore_monkey(struct monkey_params *p)
 
                 rte_eth_tx_buffer(ring_id, p->queue_id, tx_buffer[ring_id], tx_pkts[ring_id][i]);
                 tx_pkt_cnt[ring_id]++;
+                tx_bytes_cnt[ring_id]+= rte_pktmbuf_pkt_len(tx_pkts[ring_id][i]);
                 tx_head[ring_id]++;
             }
         }

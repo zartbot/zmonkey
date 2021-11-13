@@ -68,6 +68,7 @@ struct stats
     rte_atomic64_t deq_pkt_cnt;
     rte_atomic64_t failed_enq_cnt;
     rte_atomic64_t q_depth;
+    rte_atomic64_t tx_bytes;
 };
 
 struct stats_cnt
@@ -79,6 +80,7 @@ struct stats_cnt
     uint64_t deq_pkt_cnt[2];
     uint64_t failed_enq_cnt[2];
     uint64_t q_depth[2];
+    uint64_t tx_bytes[2];
 };
 
 struct monkey_params
@@ -102,6 +104,7 @@ static void read_stats(struct monkey_params *p, struct stats_cnt *s)
         s->deq_pkt_cnt[i] = rte_atomic64_read(&p->stats[i]->deq_pkt_cnt);
         s->failed_enq_cnt[i] = rte_atomic64_read(&p->stats[i]->failed_enq_cnt);
         s->q_depth[i] = rte_atomic64_read(&p->stats[i]->q_depth);
+        s->tx_bytes[i] = rte_atomic64_read(&p->stats[i]->tx_bytes);
     }
 }
 
@@ -116,6 +119,7 @@ static void z_stats(struct stats_cnt *s)
         s->deq_pkt_cnt[i] = 0;
         s->failed_enq_cnt[i] = 0;
         s->q_depth[i] = 0;
+        s->tx_bytes[i] = 0;
     }
 }
 
@@ -129,6 +133,7 @@ static void sum_stats(struct stats_cnt *d, struct stats_cnt *s)
         d->deq_pkt_cnt[i] += s->deq_pkt_cnt[i];
         d->failed_enq_cnt[i] += s->failed_enq_cnt[i];
         d->q_depth[i] += s->q_depth[i];
+        d->tx_bytes[i] += s->tx_bytes[i];
     }
 }
 
@@ -204,13 +209,19 @@ print_stats(struct config *config, struct monkey_params *lp, int num_service_cor
     printf("                              |        ");
     printf("        Duplicate :%10ld %%%%\n", config->dup_rate[1]);
     printf("                                                              |\n");
-    printf("        Total RX  :%10ld pps --->", total.rx_pkt_cnt[0]);
-    printf("                        |        ");
-    printf("        <--- Total RX  :%10ld pps \n", total.rx_pkt_cnt[1]);
-    printf("        Total TX  :%10ld pps <---", total.tx_pkt_cnt[0]);
-    printf("                        |        ");
-    printf("        ---> Total TX  :%10ld pps \n\n", total.tx_pkt_cnt[1]);
 
+    printf("        Total RX  :%10ld pps  --->", total.rx_pkt_cnt[0]);
+    printf("                       |        ");
+    printf("        <--- Total RX  :%10ld pps \n", total.rx_pkt_cnt[1]);
+
+    printf("        Total TX  :%10ld pps  <---", total.tx_pkt_cnt[0]);
+    printf("                       |        ");
+    printf("        ---> Total TX  :%10ld pps \n", total.tx_pkt_cnt[1]);
+    printf("                                                              |\n");
+    printf("        Total TX  :%10ld Mbps <---", total.tx_bytes[0]/131072); //Bytes * 8/1024/1024 to Mbps
+    printf("                       |        ");
+    printf("        ---> Total TX  :%10ld Mbps \n\n", total.tx_bytes[1]/131072);
+    
     print_line("-");
     for (int i = 0; i < num_service_core; i++)
     {

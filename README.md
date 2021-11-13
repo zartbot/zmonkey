@@ -15,49 +15,52 @@ zMonkey is based on DPDK and provide a udp based northbound interface for remote
 
     LeftPort-------->>>>>>>>>>--------->>>>>>>>>              |              <<<<<<<<<--------<<<<<<<<<<---------RightPort
                                                               |
-        Latency   :     10000 us                              |                Latency   :         0 us
+        Latency   :     10000 us                              |                Latency   :     10000 us
         Jitter    :         0 us                              |                Jitter    :         0 us
         Loss      :         0 %%                              |                Loss      :         0 %%
         Duplicate :         0 %%                              |                Duplicate :         0 %%
                                                               |
-        Total RX  :  68276668 pps --->                        |                <--- Total RX  :   6176950 pps 
-        Total TX  :   6176950 pps <---                        |                ---> Total TX  :  68281475 pps 
+        Total RX  :   8537641 pps  --->                       |                <--- Total RX  :  12560523 pps 
+        Total TX  :  12561167 pps  <---                       |                ---> Total TX  :   8537849 pps 
+                                                              |
+        Total TX  :     63058 Mbps <---                       |                ---> Total TX  :     94972 Mbps 
 
 --------------------------------------------------------------------------------------------------------------------------------------------
-Monkey[  0]   4091413 --> LeftPort --> [Drop         0 -->(Q-Depth     40282|Fail         0)--> DeQ    4092640] --> RightPort -->   4092628
-Monkey[  1]   4084706 --> LeftPort --> [Drop         0 -->(Q-Depth     39992|Fail         0)--> DeQ    4086496] --> RightPort -->   4086483
-Monkey[  2]   4340355 --> LeftPort --> [Drop         0 -->(Q-Depth     42786|Fail         0)--> DeQ    4341760] --> RightPort -->   4341781
-Monkey[  3]   4331071 --> LeftPort --> [Drop         0 -->(Q-Depth     42617|Fail         0)--> DeQ    4330944] --> RightPort -->   4330951
-Monkey[  4]   4318890 --> LeftPort --> [Drop         0 -->(Q-Depth     42145|Fail         0)--> DeQ    4320416] --> RightPort -->   4320417
-Monkey[  5]   4318237 --> LeftPort --> [Drop         0 -->(Q-Depth     44043|Fail         0)--> DeQ    4316896] --> RightPort -->   4316896
-Monkey[  6]   4321452 --> LeftPort --> [Drop         0 -->(Q-Depth     43103|Fail         0)--> DeQ    4319104] --> RightPort -->   4319119
-Monkey[  7]   4332730 --> LeftPort --> [Drop         0 -->(Q-Depth     46148|Fail         0)--> DeQ    4331424] --> RightPort -->   4331417
-Monkey[  8]   4317736 --> LeftPort --> [Drop         0 -->(Q-Depth     43199|Fail         0)--> DeQ    4319424] --> RightPort -->   4319428
-Monkey[  9]   4320157 --> LeftPort --> [Drop         0 -->(Q-Depth     43567|Fail         0)--> DeQ    4322016] --> RightPort -->   4322016
-Monkey[ 10]   4332787 --> LeftPort --> [Drop         0 -->(Q-Depth     43934|Fail         0)--> DeQ    4332160] --> RightPort -->   4332139
-Monkey[ 11]   4319630 --> LeftPort --> [Drop         0 -->(Q-Depth     43216|Fail         0)--> DeQ    4321536] --> RightPort -->   4321538
-Monkey[ 12]   4085023 --> LeftPort --> [Drop         0 -->(Q-Depth     41323|Fail         0)--> DeQ    4085216] --> RightPort -->   4085216
-Monkey[ 13]   4091710 --> LeftPort --> [Drop         0 -->(Q-Depth     42466|Fail         0)--> DeQ    4090976] --> RightPort -->   4090975
-Monkey[ 14]   4329958 --> LeftPort --> [Drop         0 -->(Q-Depth     42092|Fail         0)--> DeQ    4330176] --> RightPort -->   4330186
-Monkey[ 15]   4340813 --> LeftPort --> [Drop         0 -->(Q-Depth     42871|Fail         0)--> DeQ    4340288] --> RightPort -->   4340285
+Monkey[  0]    527920 --> LeftPort --> [Drop         0 -->(Q-Depth      5267|Fail         0)--> DeQ     527904] --> RightPort -->    527919
+Monkey[  1]    527922 --> LeftPort --> [Drop         0 -->(Q-Depth      5264|Fail         0)--> DeQ     527904] --> RightPort -->    527925
+Monkey[  2]    527941 --> LeftPort --> [Drop         0 -->(Q-Depth      5267|Fail         0)--> DeQ     527936] --> RightPort -->    527940
+Monkey[  3]    527924 --> LeftPort --> [Drop         0 -->(Q-Depth      5248|Fail         0)--> DeQ     527936] --> RightPort -->    527922
+Monkey[  4]    322660 --> LeftPort --> [Drop         0 -->(Q-Depth      3175|Fail         0)--> DeQ     322752] --> RightPort -->    322762
+Monkey[  5]    754911 --> LeftPort --> [Drop         0 -->(Q-Depth      2201|Fail         0)--> DeQ     754912] --> RightPort -->    754909
+Monkey[  6]    552003 --> LeftPort --> [Drop         0 -->(Q-Depth       752|Fail         0)--> DeQ     552032] --> RightPort -->    552025
+Monkey[  7]    552007 --> LeftPort --> [Drop         0 -->(Q-Depth      1142|Fail         0)--> DeQ     552000] --> RightPort -->    552001
+Monkey[  8]    754256 --> LeftPort --> [Drop         0 -->(Q-Depth      2114|Fail         0)--> DeQ     754272] --> RightPort -->    754256
+Monkey[  9]    322576 --> LeftPort --> [Drop         0 -->(Q-Depth      3130|Fail         0)--> DeQ     322656] --> RightPort -->    322669
+Monkey[ 10]    527904 --> LeftPort --> [Drop         0 -->(Q-Depth      5266|Fail         0)--> DeQ     527904] --> RightPort -->    527904
+Monkey[ 11]    527939 --> LeftPort --> [Drop         0 -->(Q-Depth      5269|Fail         0)--> DeQ     527936] --> RightPort -->    527938
+Monkey[ 12]    527906 --> LeftPort --> [Drop         0 -->(Q-Depth      5261|Fail         0)--> DeQ     527904] --> RightPort -->    527905
+Monkey[ 13]    527932 --> LeftPort --> [Drop         0 -->(Q-Depth      5248|Fail         0)--> DeQ     527936] --> RightPort -->    527935
+Monkey[ 14]    527916 --> LeftPort --> [Drop         0 -->(Q-Depth      5241|Fail         0)--> DeQ     527936] --> RightPort -->    527916
+Monkey[ 15]    527924 --> LeftPort --> [Drop         0 -->(Q-Depth      5269|Fail         0)--> DeQ     527904] --> RightPort -->    527923
 --------------------------------------------------------------------------------------------------------------------------------------------
-Monkey[  0]    384868 <-- LeftPort <-- [DeQ     384868 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    384868
-Monkey[  1]    389342 <-- LeftPort <-- [DeQ     389342 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    389342
-Monkey[  2]    480953 <-- LeftPort <-- [DeQ     480953 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    480953
-Monkey[  3]    389303 <-- LeftPort <-- [DeQ     389303 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    389303
-Monkey[  4]    381398 <-- LeftPort <-- [DeQ     381398 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    381398
-Monkey[  5]    387385 <-- LeftPort <-- [DeQ     387385 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    387385
-Monkey[  6]    286082 <-- LeftPort <-- [DeQ     286082 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    286082
-Monkey[  7]    389327 <-- LeftPort <-- [DeQ     389327 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    389327
-Monkey[  8]    286569 <-- LeftPort <-- [DeQ     286569 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    286569
-Monkey[  9]    387979 <-- LeftPort <-- [DeQ     387979 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    387979
-Monkey[ 10]    380284 <-- LeftPort <-- [DeQ     380284 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    380284
-Monkey[ 11]    388636 <-- LeftPort <-- [DeQ     388636 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    388636
-Monkey[ 12]    476803 <-- LeftPort <-- [DeQ     476803 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    476803
-Monkey[ 13]    387778 <-- LeftPort <-- [DeQ     387778 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    387778
-Monkey[ 14]    389524 <-- LeftPort <-- [DeQ     389524 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    389524
-Monkey[ 15]    390719 <-- LeftPort <-- [DeQ     390719 <--(Q-Depth         0|Fail         0)<-- Drop         0] <-- RightPort <--    390719
+Monkey[  0]    786318 <-- LeftPort <-- [DeQ     786336 <--(Q-Depth      7956|Fail         0)<-- Drop         0] <-- RightPort <--    786304
+Monkey[  1]    787736 <-- LeftPort <-- [DeQ     787744 <--(Q-Depth      8060|Fail         0)<-- Drop         0] <-- RightPort <--    787575
+Monkey[  2]    982515 <-- LeftPort <-- [DeQ     982496 <--(Q-Depth      9670|Fail         0)<-- Drop         0] <-- RightPort <--    982476
+Monkey[  3]    785124 <-- LeftPort <-- [DeQ     785120 <--(Q-Depth      7816|Fail         0)<-- Drop         0] <-- RightPort <--    785047
+Monkey[  4]    786164 <-- LeftPort <-- [DeQ     786144 <--(Q-Depth      7670|Fail         0)<-- Drop         0] <-- RightPort <--    786208
+Monkey[  5]    564890 <-- LeftPort <-- [DeQ     564896 <--(Q-Depth      1653|Fail         0)<-- Drop         0] <-- RightPort <--    565281
+Monkey[  6]    863260 <-- LeftPort <-- [DeQ     863264 <--(Q-Depth      1024|Fail         0)<-- Drop         0] <-- RightPort <--    862875
+Monkey[  7]    752708 <-- LeftPort <-- [DeQ     752736 <--(Q-Depth      1460|Fail         0)<-- Drop         0] <-- RightPort <--    752707
+Monkey[  8]    750114 <-- LeftPort <-- [DeQ     750112 <--(Q-Depth      2153|Fail         0)<-- Drop         0] <-- RightPort <--    750015
+Monkey[  9]    784226 <-- LeftPort <-- [DeQ     784224 <--(Q-Depth      7923|Fail         0)<-- Drop         0] <-- RightPort <--    784162
+Monkey[ 10]    588525 <-- LeftPort <-- [DeQ     588512 <--(Q-Depth      5472|Fail         0)<-- Drop         0] <-- RightPort <--    588200
+Monkey[ 11]    785942 <-- LeftPort <-- [DeQ     785952 <--(Q-Depth      8097|Fail         0)<-- Drop         0] <-- RightPort <--    785941
+Monkey[ 12]    785343 <-- LeftPort <-- [DeQ     785344 <--(Q-Depth      7563|Fail         0)<-- Drop         0] <-- RightPort <--    785388
+Monkey[ 13]    984020 <-- LeftPort <-- [DeQ     984032 <--(Q-Depth      9791|Fail         0)<-- Drop         0] <-- RightPort <--    984100
+Monkey[ 14]    787396 <-- LeftPort <-- [DeQ     787392 <--(Q-Depth      7673|Fail         0)<-- Drop         0] <-- RightPort <--    787414
+Monkey[ 15]    786886 <-- LeftPort <-- [DeQ     786880 <--(Q-Depth      8006|Fail         0)<-- Drop         0] <-- RightPort <--    786830
 ============================================================================================================================================
+
 ```
 
 ## Compile and install
@@ -122,6 +125,34 @@ Short parameters
 
      zmonkey -- -f 24 -n 12 -m 2097152 -d 100000 -D 100000
 
+```
+## Multi-instance 
+
+For example, we wants to build multiple bridge to emulate latency, the device PCIe id shows as below:
+
+```bash
+sudo dpdk-devbind.py -s
+
+Network devices using DPDK-compatible driver
+============================================
+0000:af:00.0 'Ethernet Controller E810-C for QSFP 1592' drv=vfio-pci unused=ice
+0000:af:00.1 'Ethernet Controller E810-C for QSFP 1592' drv=vfio-pci unused=ice
+...
+0000:86:00.0 'MT28800 Family [ConnectX-5 Ex] 1019' if=ens17f0 drv=mlx5_core unused=vfio-pci 
+0000:86:00.1 'MT28800 Family [ConnectX-5 Ex] 1019' if=ens17f1 drv=mlx5_core unused=vfio-pci 
+```
+
+we could use EAL parameters `-a` allow dedicated device and `--file-prefix` for difference apps, please also change the `first_lcore ` and `control_port` for difference applications.
+### Instance-1  [0000:af:00.0  <--> 0000:86:00.0 on core 29~32]
+
+```bash
+sudo ./build/zmonkey -a 0000:af:00.0 -a 0000:86:00.0 --file-prefix zm1 --  --first_lcore 24  --control_port 5555 --core_num 4  --mbuf_size 1048576 --l2r_latency 50000 --r2l_latency 50000
+```
+
+### Instance-2 with [0000:af:00.1  <--> 0000:86:00.1 on core 29~32]
+
+```bash
+sudo ./build/zmonkey -a 0000:af:00.1 -a 0000:86:00.1 --file-prefix zm2 --  --first_lcore 29 --control_port 7777 --core_num 4  --mbuf_size 1048576 --l2r_latency 50000 --r2l_latency 50000 
 ```
 
 ## Remote control methods

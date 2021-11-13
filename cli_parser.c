@@ -47,6 +47,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
     char *l_opt_arg;
     char *const short_options = "a:f:n:m:r:c:d:D:j:J:l:L:u:U:h";
     struct option long_options[] = {
+        {"file-prefix", 1, NULL, 'x'},
         {"first_lcore", 1, NULL, 'f'},
         {"core_num", 1, NULL, 'n'},
         {"mbuf_size", 1, NULL, 'm'},
@@ -214,7 +215,9 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
             }
             config->dup_rate[1] = val;
             break;    
-        case 'a':
+        case 'a': 
+            break;
+        case 'x':
             break;
         case 'h':
             zmonkey_usage();
