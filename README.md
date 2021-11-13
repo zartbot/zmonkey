@@ -1,9 +1,9 @@
 # zMonkey 
 
 zMonkey is an open-source 200G network impairment emulator tool to emulate the real-world WAN/DC conditions for your applications.
-it can support 90Mpps packet forwarding with latency, jitter and packet drop simulation.
+it can support `90Mpps` packet forwarding with latency, jitter and packet drop simulation.
 
-Latency/Jitter accuracy is around 200 microsecond, packet drop rate accuracy is a round 0.1%
+Latency/Jitter accuracy is around 200 microsecond, packet drop rate accuracy is around 0.1%
 
 zMonkey is based on DPDK and provide a udp based northbound interface for remote controller change the simulated latency/jitter/loss.
 

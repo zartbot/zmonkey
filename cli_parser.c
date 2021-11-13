@@ -18,13 +18,13 @@ parse_int(const char *arg)
 
 void zmonkey_usage()
 {
-    printf("\n\nzmonkey [EAL options] -- <Parameters>\n");
+    printf("\n\nzmonkey [EAL options] -- <Parameters>\n\n");
     printf(" -f --first_lcore         First lcore used for forwarding thread\n"
            " -n --core_num            Number of lcore used for forwarding\n"
            " -m --mbuf_size           Number of elements in mbuf\n"
            " -r --ring_size           Number of elements in mbuf\n"
            " -c --control_port        Remote control udp port(default:6666)\n"
-           "\nzMonkey chaos config\n"
+           "\nzMonkey chaos config\n\n"
            " -d --l2r_latency         Left  -> Right Delay time [us]\n"
            " -D --r2l_latency         Right -> Left Delay time [us]\n"
            " -j --l2r_jitter          Left  -> Right Jitter time [us]\n"
@@ -35,9 +35,9 @@ void zmonkey_usage()
            " -U --r2l_dup             Right -> Left Duplicate rate [%%%%]\n\n\n"
            "Example:\n\n"
            "8-Thread to handle 100G/100ms latency with 12.34%% packet drop_rate\n\n"
-           "     zmonkey -- --first_lcore 24 --core_num 8  --mbuf_size 2097152 --l2r_latency 100000 --l2r_loss 1234\n"
+           "     zmonkey -- --first_lcore 24 --core_num 8  --mbuf_size 2097152 --l2r_latency 100000 --l2r_loss 1234\n\n"
            "16-Thread with 1M element buffer per thread,first lcore start at core.24\n\n"
-           "     zmonkey -- --first_lcore 24 --core_num 16  --mbuf_size 1048576 --l2r_latency 10000 \n"
+           "     zmonkey -- --first_lcore 24 --core_num 16  --mbuf_size 1048576 --l2r_latency 10000 \n\n"
            "Short parameters\n\n"
            "     zmonkey -- -f 24 -n 12 -m 2097152 -d 100000 -D 100000\n\n\n");
 }
