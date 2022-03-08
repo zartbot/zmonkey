@@ -16,6 +16,42 @@ parse_int(const char *arg)
     return result;
 }
 
+/*
+ * helper function for parse_mac, parse one section of the ether addr.
+ */
+static const char *
+parse_uint8x16(const char *s, uint8_t *v, uint8_t ls)
+{
+    char *end;
+    unsigned long t;
+    errno = 0;
+    t = strtoul(s, &end, 16);
+    if (errno != 0 || end[0] != ls || t > UINT8_MAX)
+        return NULL;
+    v[0] = t;
+    return end + 1;
+}
+static int
+parse_mac(const char *str, struct rte_ether_addr *addr)
+{
+    uint32_t i;
+    static const uint8_t stop_sym[RTE_DIM(addr->addr_bytes)] = {
+        [0] = ':',
+        [1] = ':',
+        [2] = ':',
+        [3] = ':',
+        [4] = ':',
+        [5] = 0,
+    };
+    for (i = 0; i != RTE_DIM(addr->addr_bytes); i++)
+    {
+        str = parse_uint8x16(str, addr->addr_bytes + i, stop_sym[i]);
+        if (str == NULL)
+            return -EINVAL;
+    }
+    return 0;
+}
+
 void zmonkey_usage()
 {
     printf("\n\nzmonkey [EAL options] -- <Parameters>\n\n");
@@ -33,6 +69,10 @@ void zmonkey_usage()
            " -L --r2l_loss            Right -> Left Loss rate [%%%%]\n"
            " -u --l2r_dup             Left  -> Right Duplicate rate [%%%%]\n"
            " -U --r2l_dup             Right -> Left Duplicate rate [%%%%]\n\n\n"
+           " -y --r2l_src_mac         Right -> Left Source      MAC[xx:xx:xx:xx:xx:xx]\n"
+           " -Y --r2l_dst_mac         Right -> Left Destination MAC[xx:xx:xx:xx:xx:xx]\n"
+           " -z --l2r_src_mac         Left  -> Right Source      MAC[xx:xx:xx:xx:xx:xx]\n"
+           " -Z --l2r_dst_mac         Left  -> Right Destination MAC[xx:xx:xx:xx:xx:xx]\n\n\n"
            "Example:\n\n"
            "8-Thread to handle 100G/100ms latency with 12.34%% packet drop_rate\n\n"
            "     zmonkey -- --first_lcore 24 --core_num 8  --mbuf_size 2097152 --l2r_latency 100000 --l2r_loss 1234\n\n"
@@ -45,7 +85,7 @@ void zmonkey_usage()
 int zmonkey_args_parser(int argc, char **argv, struct config *config)
 {
     char *l_opt_arg;
-    char *const short_options = "a:f:n:m:r:c:d:D:j:J:l:L:u:U:h";
+    char *const short_options = "a:f:n:m:r:c:d:D:j:J:l:L:u:U:y:Y:z:Z:h";
     struct option long_options[] = {
         {"file-prefix", 1, NULL, 'x'},
         {"first_lcore", 1, NULL, 'f'},
@@ -61,6 +101,10 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
         {"r2l_loss", 1, NULL, 'L'},
         {"l2r_dup", 1, NULL, 'u'},
         {"r2l_dup", 1, NULL, 'U'},
+        {"r2l_src_mac", 1, NULL, 'y'},
+        {"r2l_dst_mac", 1, NULL, 'Y'},
+        {"l2r_src_mac", 1, NULL, 'z'},
+        {"l2r_dst_mac", 1, NULL, 'Z'},
         {0, 0, 0, 0},
     };
 
@@ -118,7 +162,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
         // control port
         case 'c':
             val = parse_int(optarg);
-            if ((val < 1) || (val> 65535))
+            if ((val < 1) || (val > 65535))
             {
                 printf("Invalid control port: %ld\n", val);
                 zmonkey_usage();
@@ -136,7 +180,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->latency[0] = val;
-            break;     
+            break;
         // Latency
         case 'D':
             val = parse_int(optarg);
@@ -147,7 +191,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->latency[1] = val;
-            break;          
+            break;
 
         // Jitter
         case 'j':
@@ -159,7 +203,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->jitter[0] = val;
-            break;    
+            break;
         // Jitter
         case 'J':
             val = parse_int(optarg);
@@ -170,7 +214,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->jitter[1] = val;
-            break;    
+            break;
         // Loss
         case 'l':
             val = parse_int(optarg);
@@ -181,7 +225,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->drop_rate[0] = val;
-            break;    
+            break;
         // Loss
         case 'L':
             val = parse_int(optarg);
@@ -192,7 +236,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->drop_rate[1] = val;
-            break;    
+            break;
         // Duplicate
         case 'u':
             val = parse_int(optarg);
@@ -203,7 +247,7 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->dup_rate[0] = val;
-            break;    
+            break;
         // Loss
         case 'U':
             val = parse_int(optarg);
@@ -214,8 +258,49 @@ int zmonkey_args_parser(int argc, char **argv, struct config *config)
                 return -1;
             }
             config->dup_rate[1] = val;
-            break;    
-        case 'a': 
+            break;
+
+        case 'y':
+            config->enable_mac_update = 1;
+            val = parse_mac(optarg, &config->src_mac[0]);
+            if (val != 0)
+            {
+                printf("Invalid r2l Source MAC address: %s\n", optarg);
+                zmonkey_usage();
+                return -1;
+            }
+
+        case 'Y':
+            config->enable_mac_update = 1;
+            val = parse_mac(optarg, &config->dst_mac[0]);
+            if (val != 0)
+            {
+                printf("Invalid r2l Destination MAC address: %s\n", optarg);
+                zmonkey_usage();
+                return -1;
+            }
+
+        case 'z':
+            config->enable_mac_update = 1;
+            val = parse_mac(optarg, &config->src_mac[1]);
+            if (val != 0)
+            {
+                printf("Invalid l2r Source MAC address: %s\n", optarg);
+                zmonkey_usage();
+                return -1;
+            }
+
+        case 'Z':
+            config->enable_mac_update = 1;
+            val = parse_mac(optarg, &config->dst_mac[1]);
+            if (val != 0)
+            {
+                printf("Invalid l2r Destination MAC address: %s\n", optarg);
+                zmonkey_usage();
+                return -1;
+            }
+
+        case 'a':
             break;
         case 'x':
             break;

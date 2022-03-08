@@ -111,6 +111,12 @@ zMonkey chaos config
  -U --r2l_dup             Right -> Left Duplicate rate [%%]
 
 
+ -y --r2l_src_mac         Right -> Left Source      MAC[xx:xx:xx:xx:xx:xx]
+ -Y --r2l_dst_mac         Right -> Left Destination MAC[xx:xx:xx:xx:xx:xx]
+ -z --l2r_src_mac         Left  -> Right Source      MAC[xx:xx:xx:xx:xx:xx]
+ -Z --l2r_dst_mac         Left  -> Right Destination MAC[xx:xx:xx:xx:xx:xx]
+
+
 Example:
 
 8-Thread to handle 100G/100ms latency with 12.34% packet drop_rate
@@ -124,6 +130,10 @@ Example:
 Short parameters
 
      zmonkey -- -f 24 -n 12 -m 2097152 -d 100000 -D 100000
+
+Modify MAC address for Router testing
+
+     zmonkey -- -y aa:aa:bb:1b:cc:cc  -Y de:ad:be:ef:aa:bb -z ca:fe:be:ef:00:01 -Z ca:fe:be:ef:00:02
 
 ```
 ## Multi-instance 

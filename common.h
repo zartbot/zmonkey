@@ -46,6 +46,9 @@ struct config
     uint64_t jitter[2];
     uint64_t drop_rate[2];
     uint64_t dup_rate[2];
+    int enable_mac_update;
+    struct rte_ether_addr src_mac[2];
+    struct rte_ether_addr dst_mac[2];
 };
 
 static struct config config;
@@ -91,6 +94,9 @@ struct monkey_params
     unsigned int delay_ring_size;
     struct chaos_config *config[2];
     struct stats *stats[2];
+    int enable_mac_update;
+    struct rte_ether_addr src_mac[2];
+    struct rte_ether_addr dst_mac[2];
 };
 
 static void read_stats(struct monkey_params *p, struct stats_cnt *s)
@@ -234,6 +240,17 @@ print_stats(struct config *config, struct monkey_params *lp, int num_service_cor
         print_stats_r2l(&stats[i]);
     }
     print_line("=");
+}
+
+static void print_ether_addr(char *prefix,struct rte_ether_addr *src,struct rte_ether_addr *dst){
+         printf("%s %02X:%02X:%02X:%02X:%02X:%02X -> %02X:%02X:%02X:%02X:%02X:%02X \n",
+               prefix,
+               src->addr_bytes[0], src->addr_bytes[1],
+               src->addr_bytes[2], src->addr_bytes[3],
+               src->addr_bytes[4], src->addr_bytes[5],
+               dst->addr_bytes[0], dst->addr_bytes[1],
+               dst->addr_bytes[2], dst->addr_bytes[3],
+               dst->addr_bytes[4], dst->addr_bytes[5]);
 }
 
 static volatile bool force_quit;

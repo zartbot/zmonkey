@@ -37,6 +37,8 @@ int lcore_monkey(struct monkey_params *p)
 
     //allocate ring buffer for delayed packets
     struct rte_ring *delay_ring[2];
+    struct rte_ether_hdr *eth_hdr;
+
     char ring_name[18];
     sprintf(ring_name, "left_ring%d", p->queue_id);
     delay_ring[0] = rte_ring_create(ring_name, p->delay_ring_size,
@@ -93,7 +95,6 @@ int lcore_monkey(struct monkey_params *p)
     uint64_t tx_bytes_cnt[2]= {0,0};
 
     
-
     while (!force_quit)
     {
         cur_tsc = rte_rdtsc();
@@ -201,6 +202,7 @@ int lcore_monkey(struct monkey_params *p)
             {
                 rte_prefetch0(rte_pktmbuf_mtod(tx_pkts[ring_id][i], void *));
             }
+
             for (i = tx_head[ring_id]; i < (tx_tail[ring_id] - PREFETCH_OFFSET); i++)
             {
                 rte_prefetch0(rte_pktmbuf_mtod(tx_pkts[ring_id][i + PREFETCH_OFFSET], void *));
@@ -210,6 +212,11 @@ int lcore_monkey(struct monkey_params *p)
                     i = tx_tail[ring_id];
                     break;
                 } 
+                if (p->enable_mac_update > 0) {
+                   eth_hdr = rte_pktmbuf_mtod(tx_pkts[ring_id][i], struct rte_ether_hdr *);
+                   rte_ether_addr_copy(&p->src_mac[ring_id],&eth_hdr->s_addr);
+                   rte_ether_addr_copy(&p->dst_mac[ring_id],&eth_hdr->d_addr);
+                }
                 rte_eth_tx_buffer(ring_id, p->queue_id, tx_buffer[ring_id], tx_pkts[ring_id][i]);
                 tx_pkt_cnt[ring_id]++;
                 tx_bytes_cnt[ring_id]+= rte_pktmbuf_pkt_len(tx_pkts[ring_id][i]);
@@ -223,7 +230,11 @@ int lcore_monkey(struct monkey_params *p)
                     i = tx_tail[ring_id];
                     break;
                 } 
-
+                if (p->enable_mac_update > 0) {
+                   eth_hdr = rte_pktmbuf_mtod(tx_pkts[ring_id][i], struct rte_ether_hdr *);
+                   rte_ether_addr_copy(&p->src_mac[ring_id],&eth_hdr->s_addr);
+                   rte_ether_addr_copy(&p->dst_mac[ring_id],&eth_hdr->d_addr);
+                }
                 rte_eth_tx_buffer(ring_id, p->queue_id, tx_buffer[ring_id], tx_pkts[ring_id][i]);
                 tx_pkt_cnt[ring_id]++;
                 tx_bytes_cnt[ring_id]+= rte_pktmbuf_pkt_len(tx_pkts[ring_id][i]);

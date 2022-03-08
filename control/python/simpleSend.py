@@ -4,7 +4,7 @@ import time
 
 
 udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-monkeyHost = ('127.0.0.1',6666)
+monkeyHost = ('192.168.99.103',6666)
 
 #  instr
 #  1: config latency
@@ -18,8 +18,8 @@ monkeyHost = ('127.0.0.1',6666)
 # 
 #  value uint64_t
 
-instr = 3
-direction = 0
+instr = 1
+direction = 1
 value = 1234
 
 sendData = str(instr) +"," + str(direction) +","+ str(value) 

@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     // TODO based on linkspeed allocate memory ?
 
     // TODO: Add CLI parser or directly use remote client.
-    retval = zmonkey_args_parser(argc, argv,&config);
+    retval = zmonkey_args_parser(argc, argv, &config);
     if (retval < 0)
         rte_exit(EXIT_FAILURE, "Invalid arguments\n");
 
@@ -77,6 +77,13 @@ int main(int argc, char *argv[])
     printf("num_mb_elements: %d\n", config.mbuf_size);
     printf("delay ring size per core: %d\n", config.delay_ring_size);
     printf("control udp port: %d\n", config.ctrl_udp_port);
+
+    if (config.enable_mac_update > 0)
+    {
+
+        print_ether_addr("Left Port", &config.src_mac[0], &config.dst_mac[0]);
+        print_ether_addr("Right Port", &config.src_mac[1], &config.dst_mac[1]);
+    }
 
     /* Creates a new mempool in memory to hold the mbufs. */
     for (int i = 0; i < config.num_service_core; ++i)
@@ -124,6 +131,13 @@ int main(int argc, char *argv[])
             rte_atomic64_set(&lp[i].stats[j]->deq_pkt_cnt, 0);
             rte_atomic64_set(&lp[i].stats[j]->failed_enq_cnt, 0);
             rte_atomic64_set(&lp[i].stats[j]->q_depth, 0);
+        }
+        if (config.enable_mac_update > 0)
+        {
+            rte_ether_addr_copy(&config.src_mac[0], &lp->src_mac[0]);
+            rte_ether_addr_copy(&config.src_mac[1], &lp->src_mac[1]);
+            rte_ether_addr_copy(&config.dst_mac[0], &lp->dst_mac[0]);
+            rte_ether_addr_copy(&config.dst_mac[1], &lp->dst_mac[1]);
         }
         rte_eal_remote_launch((lcore_function_t *)lcore_monkey, &lp[i], lcore_num++);
     }
